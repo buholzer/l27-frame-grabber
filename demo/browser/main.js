@@ -23,6 +23,8 @@ class FrameAnalyzerDemo {
       video: document.getElementById('video'),
       canvas: document.getElementById('canvas'),
       captureOverlay: document.getElementById('captureOverlay'),
+      videoPlaceholder: document.getElementById('videoPlaceholder'),
+      matrixPlaceholder: document.getElementById('matrixPlaceholder'),
       toggleCamera: document.getElementById('toggleCamera'),
       status: document.getElementById('status'),
       output: document.getElementById('output'),
@@ -45,6 +47,8 @@ class FrameAnalyzerDemo {
   init() {
     this.setupEventListeners();
     this.updateControlValues();
+    // Generate placeholder after a small delay to ensure layout is complete
+    setTimeout(() => this.generateMatrixPlaceholder(), 10);
   }
 
   setupEventListeners() {
@@ -79,6 +83,11 @@ class FrameAnalyzerDemo {
         valueElement.textContent = element.value;
       }
     });
+
+    // Update matrix placeholder when not running
+    if (!this.isRunning) {
+      this.generateMatrixPlaceholder();
+    }
   }
 
   toggleCamera() {
@@ -106,6 +115,9 @@ class FrameAnalyzerDemo {
       this.elements.video.replaceWith(video);
       this.elements.video = video;
       video.style.display = 'block';
+
+      // Hide video placeholder
+      this.elements.videoPlaceholder.style.display = 'none';
 
       // Wait for video to be ready
       await this.cameraManager.waitForVideoReady();
@@ -157,8 +169,13 @@ class FrameAnalyzerDemo {
       this.elements.video.style.display = 'none';
       this.elements.captureOverlay.style.display = 'none';
 
+      // Show placeholders
+      this.elements.videoPlaceholder.style.display = 'flex';
+      this.elements.matrixPlaceholder.style.display = 'flex';
+
       // Reset UI
-      this.elements.output.innerHTML = '<p style="color: #7f8c8d; text-align: center; padding: 20px;">Start camera to see boolean matrix visualization</p>';
+      this.elements.output.innerHTML = '';
+      this.elements.output.appendChild(this.elements.matrixPlaceholder);
       this.elements.fps.textContent = '0';
       this.elements.frameCount.textContent = '0';
 
@@ -306,7 +323,6 @@ class FrameAnalyzerDemo {
         // Apply size and styling
         cell.style.width = `${finalCellSize}px`;
         cell.style.height = `${finalCellSize}px`;
-        cell.style.border = finalCellSize > 8 ? '1px solid #333' : 'none';
         cell.style.borderRadius = '50%';
 
         grid.appendChild(cell);
@@ -386,6 +402,38 @@ class FrameAnalyzerDemo {
     // Ensure overlay is visible
     overlay.style.display = 'block';
     overlay.style.position = 'absolute';
+  }
+
+  generateMatrixPlaceholder() {
+    const grid = document.getElementById('matrixPlaceholderGrid');
+    if (!grid) return;
+
+    // Get current matrix dimensions
+    const cols = parseInt(this.elements.columns.value, 10);
+    const rows = parseInt(this.elements.rows.value, 10);
+
+    // Calculate optimal cell size (same logic as real matrix)
+    const container = this.elements.output.parentElement;
+    const containerWidth = container.offsetWidth - 40;
+    const minCellSize = 6;
+    const maxCellSize = 20;
+    const calculatedWidth = Math.floor(containerWidth / cols) - 2;
+    const calculatedSize = Math.min(calculatedWidth, maxCellSize);
+    const finalCellSize = Math.max(calculatedSize, minCellSize);
+
+    // Update grid layout
+    grid.style.gridTemplateColumns = `repeat(${cols}, ${finalCellSize}px)`;
+    grid.style.gridTemplateRows = `repeat(${rows}, ${finalCellSize}px)`;
+
+    // Generate dots
+    grid.innerHTML = '';
+    for (let i = 0; i < rows * cols; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'matrix-placeholder-dot';
+      dot.style.width = `${finalCellSize}px`;
+      dot.style.height = `${finalCellSize}px`;
+      grid.appendChild(dot);
+    }
   }
 }
 
