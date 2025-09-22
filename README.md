@@ -2,6 +2,12 @@
 
 A TypeScript library for real-time pixel-to-boolean matrix extraction from video frames. Designed to work in both browser and Node.js environments with high performance and easy integration.
 
+## 🎮 Live Demo
+
+**[Try the Interactive Demo →](https://buholzer.github.io/l27-frame-grabber/)**
+
+Experience real-time frame analysis in your browser with live camera feed, adjustable parameters, and visual matrix output.
+
 ## Features
 
 - 🎥 **Real-time analysis** of video frames
