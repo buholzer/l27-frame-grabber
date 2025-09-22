@@ -110,7 +110,7 @@ export function createDefaultConfig(imageWidth: number, imageHeight: number): Fr
     offsetY: 112,
     windowWidth: 168,
     windowHeight: 224,
-    rows: 112,
+    rows: 64,
     columns: 42,
     threshold: 128
   };
