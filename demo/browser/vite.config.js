@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: '.',
+  base: process.env.NODE_ENV === 'production' ? '/l27-frame-grabber/' : '/',
   server: {
     port: 3009,
     host: true
@@ -15,9 +16,7 @@ export default defineConfig({
     outDir: 'dist',
     target: 'esnext',
     rollupOptions: {
-      input: {
-        main: './index.html'
-      }
+      input: './index.html'
     }
   }
 });

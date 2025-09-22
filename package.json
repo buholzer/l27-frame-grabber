@@ -19,7 +19,7 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "demo": "vite demo/browser --open",
-    "demo:build": "vite build demo/browser",
+    "demo:build": "cd demo/browser && NODE_ENV=production vite build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "lint": "eslint src/**/*.ts",
